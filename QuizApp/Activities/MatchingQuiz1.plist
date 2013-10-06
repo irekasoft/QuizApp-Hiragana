@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>q</key>
+		<string>Nabi Muhammad SAW dilahirkan di negeri   </string>
+		<key>a</key>
+		<string>Mekah</string>
+	</dict>
+	<dict>
+		<key>q</key>
+		<string>Tarikh kelahiran Nabi SAW ialah pada</string>
+		<key>a</key>
+		<string>12 Rabiulawal</string>
+	</dict>
+	<dict>
+		<key>q</key>
+		<string>Nabi SAW dilahirkan pada hari</string>
+		<key>a</key>
+		<string>Isnin</string>
+	</dict>
+	<dict>
+		<key>q</key>
+		<string>Nama perempuan yang melahirkan Nabi SAW ialah  </string>
+		<key>a</key>
+		<string>Aminah</string>
+	</dict>
+</array>
+</plist>
