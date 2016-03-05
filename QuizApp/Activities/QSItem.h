@@ -16,4 +16,13 @@
 
 @property (nonatomic, assign) int locationNumber;
 
+@property (nonatomic, retain) NSString *customText;
+
+@property (nonatomic, retain) 	UIColor *normalColor;
+@property (nonatomic, retain) 	UIColor *highlightedColor;
+@property (assign) CGFloat hue;
+@property (assign) CGFloat saturation;
+@property (assign) CGFloat brightness;
+@property (assign) 	float	radius;
+
 @end

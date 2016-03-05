@@ -16,6 +16,18 @@
     
 }
 
+@end
 
+
+@interface MyCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *romaji;
+@property (weak, nonatomic) IBOutlet UILabel *hiragana;
+@property (weak, nonatomic) IBOutlet UILabel *hiraganaExample;
+@property (weak, nonatomic) IBOutlet UILabel *hira_romaji;
+
+@end
+
+@implementation MyCell
 
 @end

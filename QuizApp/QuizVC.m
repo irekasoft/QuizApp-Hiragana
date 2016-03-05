@@ -29,27 +29,86 @@
 {
     [super viewDidLoad];
 
-    NSString *file = @(__FILE__);
-    file = [[file stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"ChineseCore.csv"];
-	
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    
+    [super viewDidAppear:animated];
+    
+    [self generateQuestion];
+    
+}
+
+- (void)generateQuestion{
+    
+    self.countLabel.text = [NSString stringWithFormat:@"%d",correctCount++];
+    
+    NSString *file;
+    
+    file = [[NSBundle mainBundle] pathForResource:@"HiraganaList" ofType:@"csv"];
+    
 	NSLog(@"Beginning...");
+    
 	NSStringEncoding encoding = 0;
     NSInputStream *stream = [NSInputStream inputStreamWithFileAtPath:file];
+    NSLog(@"stream %@",stream);
 	CHCSVParser * p = [[CHCSVParser alloc] initWithInputStream:stream usedEncoding:&encoding delimiter:','];
     [p setRecognizesBackslashesAsEscapes:YES];
     [p setSanitizesFields:YES];
-    [p setDelegate:self];
+    
 	
 	NSLog(@"encoding: %@", CFStringGetNameOfEncoding(CFStringConvertNSStringEncodingToEncoding(encoding)));
-    
-    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+    [p setDelegate:self];
 	[p parse];
-	NSTimeInterval end = [NSDate timeIntervalSinceReferenceDate];
 	
-	NSLog(@"raw difference: %f", (end-start));
+    //NSLog(@"%@", _lines);
+    
+    selectedItems = [_lines randomItemsForSize:4 startFrom:1];
+    shuffledArray = [selectedItems shuffleArray];
+    
+    self.questionLabel.text = selectedItems[0][0];
+    
+    int a = 0;
+    
+    for (QSButton *button in self.answerButtons){
+        
+        [button setTitle:shuffledArray[a++][1] forState:UIControlStateNormal];
+        
+    }
+}
+
+
+- (IBAction)answer:(id)sender {
+    
+    QSButton *button = (QSButton *)sender;
+    
+    NSString *questionStg = shuffledArray[button.tag - 1][1];
+    NSString *answerStg = selectedItems[0][1];
+    
+    
+//    NSString *title = [NSString stringWithFormat:@"%@ = %@",questionStg, answerStg];
+    
+    NSString *text;
+    if ([answerStg isEqualToString:questionStg]) {
+        text = @"Right";
+        isCorrect = YES;
+        
+        [self generateQuestion];
+    }else{
+        text = @"Wrong";
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:text message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        
+    }
     
 
     
+    isCorrect = NO;
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+ 
 }
 
 #pragma mark - CHCSV Parser
@@ -63,7 +122,7 @@
     _currentLine = [[NSMutableArray alloc] init];
 }
 - (void)parser:(CHCSVParser *)parser didReadField:(NSString *)field atIndex:(NSInteger)fieldIndex {
-    NSLog(@"%@", field);
+    
     [_currentLine addObject:field];
 }
 
@@ -75,7 +134,7 @@
 - (void)parserDidEndDocument:(CHCSVParser *)parser {
     //	NSLog(@"parser ended: %@", csvFile);
     
-        NSLog(@"lines : %@",_lines);
+    //NSLog(@"lines : %@",_lines);
     
 }
 - (void)parser:(CHCSVParser *)parser didFailWithError:(NSError *)error {

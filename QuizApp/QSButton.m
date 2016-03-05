@@ -1,17 +1,20 @@
 //
-//  QSItem.m
-//  MyStoryBook
+//  QSButton.m
+//  QuizApp
 //
-//  Created by Muhammad Hijazi  on 29/9/13.
+//  Created by Muhammad Hijazi  on 8/10/13.
 //  Copyright (c) 2013 iReka Soft. All rights reserved.
 //
 
-#import "QSItem.h"
+#import "QSButton.h"
 
+@implementation QSButton
 
-@implementation QSItem
-
-
+@synthesize hue;
+@synthesize saturation;
+@synthesize brightness;
+@synthesize normalColor, highlightedColor;
+@synthesize customText;
 
 // Delete initWithFrame and add the following:
 -(id) initWithCoder:(NSCoder *)aDecoder {
@@ -19,14 +22,17 @@
         self.opaque = NO;
 		self.normalColor = self.backgroundColor;
         self.backgroundColor = [UIColor clearColor];
-		_hue = 0.2;
-        _saturation = 0.2;
-        _brightness = 0.3;
+        
+		hue = 0.2;
+        saturation = 0.2;
+        brightness = 0.3;
+        
 		if (!self.highlightedColor) {
 			self.highlightedColor = [UIColor blackColor];
 			self.highlightedColor = self.titleLabel.shadowColor;
             
 		}
+        
     }
     return self;
 }
@@ -43,7 +49,7 @@
     
     //    if (aLabel == nil) {
     aLabel = [[UILabel alloc] initWithFrame:CGRectMake(14, 10, 80, 20)];
-    aLabel.text = self.customText;
+    aLabel.text = customText;
     
     aLabel.backgroundColor = [UIColor clearColor];
     [self addSubview:aLabel];
@@ -52,40 +58,36 @@
     
 	//NSLog(@"aa%@",[UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1.0].CGColor);
 	//NSLog(@"aa%@", self.normalColor);
-	self.radius = 4.0;
-	
-	CGContextRef context = UIGraphicsGetCurrentContext();
+	radius = 15.0;
+
+	   
+    [self.normalColor setFill];
+    [self.highlightedColor setStroke];
     
-	//CGColorRef normalColorRef = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1.0].CGColor;
-	CGColorRef normalColorRef = self.normalColor.CGColor;
-	CGColorRef highlightedColorRef = self.highlightedColor.CGColor;
-    
-    
-    
-    CGFloat outerMargin = 0.f;
+    CGFloat outerMargin = 2;
     CGRect outerRect = CGRectInset(self.bounds, outerMargin, outerMargin);
-    CGMutablePathRef outerPath = createRoundedRectForRectA(outerRect, self.radius);
-	
+
+
+    UIBezierPath *roundedRectPath = [UIBezierPath bezierPathWithRoundedRect:outerRect cornerRadius:8.0f];
+
+    [roundedRectPath setLineWidth:0.5];
+    
 	if (self.state != UIControlStateHighlighted) {
-		CGContextSaveGState(context);
-		CGContextSetFillColorWithColor(context, normalColorRef);
-		CGContextAddPath(context, outerPath);
-		CGContextFillPath(context);
-		CGContextRestoreGState(context);
+        
+        [roundedRectPath stroke];
 		
 	}else {
 		
-		CGContextSaveGState(context);
-		CGContextSetFillColorWithColor(context, highlightedColorRef);
-		CGContextAddPath(context, outerPath);
-		CGContextFillPath(context);
-		CGContextRestoreGState(context);
-		
+        [[UIColor colorWithRed:1.0 green:0 blue:0 alpha:0.8] setFill];
+		[roundedRectPath fill];
+        [roundedRectPath stroke];
 	}
     
 }
 
-CGMutablePathRef createRoundedRectForRectA(CGRect rect, CGFloat radius) {
+#pragma mark - c
+
+CGMutablePathRef createRoundedRectForRect2(CGRect rect, CGFloat radius) {
 	
     CGMutablePathRef path = CGPathCreateMutable();
 	
@@ -102,8 +104,6 @@ CGMutablePathRef createRoundedRectForRectA(CGRect rect, CGFloat radius) {
 	
     return path;
 }
-#pragma mark - c
-
 
 // Add the following methods to the bottom
 - (void)hesitateUpdate
@@ -135,5 +135,6 @@ CGMutablePathRef createRoundedRectForRectA(CGRect rect, CGFloat radius) {
     [self setNeedsDisplay];
     [self performSelector:@selector(hesitateUpdate) withObject:nil afterDelay:0.1];
 }
+
 
 @end

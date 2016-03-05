@@ -27,8 +27,10 @@
 {
     [super viewDidLoad];
 
-    NSString *file = @(__FILE__);
-    file = [[file stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"hiragana.csv"];
+    
+    NSString *file;
+    
+    file = [[NSBundle mainBundle] pathForResource:@"HiraganaList" ofType:@"csv"];
 	
 	NSLog(@"Beginning...");
 	NSStringEncoding encoding = 0;
@@ -40,12 +42,13 @@
 	
 	NSLog(@"encoding: %@", CFStringGetNameOfEncoding(CFStringConvertNSStringEncodingToEncoding(encoding)));
     
-    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+   
 	[p parse];
-	NSTimeInterval end = [NSDate timeIntervalSinceReferenceDate];
 	
-	NSLog(@"raw difference: %f", (end-start));
+	
+	NSLog(@"raw difference: %@", _lines[0][1]);
 
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,77 +63,30 @@
 {
 
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 
     // Return the number of rows in the section.
-    return 0;
+    return [_lines count] - 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    MyCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    
+    cell.hiragana.text = _lines[indexPath.row + 1][0];
+    cell.romaji.text = _lines[indexPath.row + 1][1];
+    cell.hiraganaExample.text = _lines[indexPath.row + 1][2];
+    cell.hira_romaji.text = _lines[indexPath.row + 1][3];
+    
     
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-
- */
-
 
 #pragma mark - CHCSV Parser
 
@@ -143,7 +99,7 @@
     _currentLine = [[NSMutableArray alloc] init];
 }
 - (void)parser:(CHCSVParser *)parser didReadField:(NSString *)field atIndex:(NSInteger)fieldIndex {
-    NSLog(@"%@", field);
+    
     [_currentLine addObject:field];
 }
 
@@ -155,7 +111,7 @@
 - (void)parserDidEndDocument:(CHCSVParser *)parser {
     //	NSLog(@"parser ended: %@", csvFile);
     
-    NSLog(@"lines : %@",_lines);
+    //NSLog(@"lines : %@",_lines);
     
 }
 - (void)parser:(CHCSVParser *)parser didFailWithError:(NSError *)error {

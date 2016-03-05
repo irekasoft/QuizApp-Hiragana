@@ -14,13 +14,24 @@
 #import <UIKit/UIKit.h>
 #import "AnswerBox.h"
 #import "RightWrongImageView.h"
+#import "QSItem.h"
+#import "NSArray+Random.h"
 
-@interface MatchingQuizVC : UIViewController{
+@interface MatchingQuizVC : UIViewController  {
 
     CGPoint originalPoint;
     BOOL isTouched;
 
+
 }
+
+@property (strong, nonatomic) NSMutableDictionary *dataDict;
+@property (strong, nonatomic) NSMutableArray *dataArray;
+
+@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *questionLabels;
+
+@property (strong, nonatomic) IBOutletCollection(QSItem) NSArray *answerItems;
+
 
 @property (strong, nonatomic) NSDictionary *correctAnswers;
 @property (strong, nonatomic) NSMutableDictionary *answeringDictionary;

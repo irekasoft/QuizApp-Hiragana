@@ -1,16 +1,15 @@
 //
-//  IRButton.h
-//  IRButton
+//  QSButton.h
+//  QuizApp
 //
-//  Created by Muhammad Hijazi on 11/02/03.
-//  Copyright 2011 hijazi.org. All rights reserved.
+//  Created by Muhammad Hijazi  on 8/10/13.
+//  Copyright (c) 2013 iReka Soft. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-
-@interface IRButton : UIButton {
-
+@interface QSButton : UIButton {
+    
 	UIColor *normalColor;
 	UIColor *highlightedColor;
 	
@@ -25,7 +24,7 @@
 }
 
 @property (nonatomic, retain) NSString *customText;
-@property (nonatomic, retain) 	UIColor *normalColor; 
+@property (nonatomic, retain) 	UIColor *normalColor;
 @property (nonatomic, retain) 	UIColor *highlightedColor;
 @property  CGFloat hue;
 @property  CGFloat saturation;
